@@ -1,55 +1,32 @@
-import { ConnectWallet } from "@thirdweb-dev/react";
+import { ConnectWallet, useAddress, useContract, useContractRead } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
-import styles from "../styles/Home.module.css";
+import { Container,Box,Text,Flex,SimpleGrid } from "@chakra-ui/react";
+
 
 const Home: NextPage = () => {
+
+  const address = useAddress();
+  const contractAddress = "0xF84C00c2210e439f6454F6773C5c21660384A94E";
+
+  const {contract} = useContract(contractAddress);
+
+  const { data: totalCoffees, isLoading: loadingTotalCoffee} = useContractRead(contract, "getTotalCofee");
+  const { data: recentCoffees, isLoading: loadingRecentCoffee} = useContractRead(contract, "getAllCofee");
+
   return (
-    <div className={styles.container}>
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="http://thirdweb.com/">thirdweb</a>!
-        </h1>
+   <Container maxW={"1200px"} w={"full"}>
+    <Flex justifyContent={"space-between"} alignItems ={"center"} py={"20px"} height={"80px"}>
+      <Box>
+        <Text fontWeight={"bold"}> Buy me a Coffee</Text>
+      </Box>
+      <ConnectWallet />
+    </Flex>
+    <SimpleGrid columns= {2} spacing={10} mt={"40px"}>
 
-        <p className={styles.description}>
-          Get started by configuring your desired network in{" "}
-          <code className={styles.code}>pages/_app.tsx</code>, then modify the{" "}
-          <code className={styles.code}>pages/index.tsx</code> file!
-        </p>
-
-        <div className={styles.connect}>
-          <ConnectWallet />
-        </div>
-
-        <div className={styles.grid}>
-          <a href="https://portal.thirdweb.com/" className={styles.card}>
-            <h2>Portal &rarr;</h2>
-            <p>
-              Guides, references and resources that will help you build with
-              thirdweb.
-            </p>
-          </a>
-
-          <a href="https://thirdweb.com/dashboard" className={styles.card}>
-            <h2>Dashboard &rarr;</h2>
-            <p>
-              Deploy, configure and manage your smart contracts from the
-              dashboard.
-            </p>
-          </a>
-
-          <a
-            href="https://portal.thirdweb.com/templates"
-            className={styles.card}
-          >
-            <h2>Templates &rarr;</h2>
-            <p>
-              Discover and clone template projects showcasing thirdweb features.
-            </p>
-          </a>
-        </div>
-      </main>
-    </div>
+    </SimpleGrid>
+   </Container>
   );
 };
 
 export default Home;
+ 
